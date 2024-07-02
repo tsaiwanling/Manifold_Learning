@@ -9,7 +9,7 @@ class DIFFUSION_MAP:
         self.opt = opt
 
     def train(self, data):
-        data = data.flatten(start_dim=1)
+        data = data.reshape(data.shape[0], -1)
         K = self.get_K(data)
         Q_hat, D_hat = self.get_QD(K)  # D_hat = D^(-1/2)
         self.eig_vals, eig_vecs = self.get_eig(Q_hat, D_hat, c=self.c)
@@ -57,8 +57,8 @@ class ROSELAND:
 
     def get_W(self, data, landmark):
         # data resize to 2D
-        data = data.flatten(start_dim=1)
-        landmark = landmark.flatten(start_dim=1)
+        data = data.reshape(data.shape[0], -1)
+        landmark = landmark.reshape(landmark.shape[0], -1)
         W = cdist(data, landmark)
         if (self.opt == 'global'):
             eps = np.sqrt(np.median(np.median(W, axis=1)))
